@@ -1,0 +1,14 @@
+{
+    "categories": [
+        {
+            "categoryName": "翻译",
+            "links": [
+                {
+                    "name": "百度翻译",
+                    "link": "https://fanyi.baidu.com/?aldtype=16047#auto/zh",
+                    "base64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACyElEQVQ4jU2SS2hdZRSFv7XPOffePJoYG8WSjBq1SqvViqDoJCBVBwWhKo6kDoITUVBwKjgQnCjiQDEjgyKCM0VECq0YldQipcUigrVqYkN85nkf5/7/cnBb6Z6vtfbe69MLH3dvObGS55c3fF9KJgJsBAbE1RPC2RAhpsf01exUzOnQ2+0vL2y37i96O9lCKVlFQGggtk32wKqTIEJuBa4bwzEz0lnU9a9uO2VnkKoCjTTk7a7Vy6ZOMFSJoQrqZA7uKbzRsc6u2s3SDinKZFyEYr2TeXR/5feONnX43TajDfHUoYqf/8nUCcZaYu6uUmdW7QcX2upnZHBIA3cTPrua9PLJHqtb5uSFzLfLiekx8dZSn5mJYGXDPPNJR9lyaHCWrnlly5PDYnJYtGuztmN6fagzbGyad442eeL2kirgyPsdjv+YaDTFrgZIQuVLm3767opjd5QUATMT4t75Dn+3zWMHSp48WLLeNTftDkYqOL+W+eJi5o2lGhtivCU++j5xeKHD85/1ADHWgkduLSkDnv20hw2vf13z5lKNJX74K9PtgwQhiZRNuzbdZIzZ6sGplQTAQzcWPDBT8viBgkYhPjzX54NzfZol2KK0TUhc6V5ANvzyr7m0aX7fMCnD0m+ZhTN9dg+LPaNBuzYRppSEL5Nmm3QZmiP7CvZNBs0SQua2G4Jjd5bsvy44cTExf7rPUIgSsBh0WoQ00RIh+O5S5td1Y8Nz91ScWs689k3NroaoLbcqlMHllfSqQKtb+MXPa2124Y8dc34tMzUmQmKzZ/7cNOySU84KDUD4H2WFlJK10ZPHmlYl0c9mvCUevrng+E+JtR1cabCtbRehiOnxWEyNkXC2i0KeHEKFRLKJEOtdM3+6z9q2Ka8Sp8ZITI/HYsxOxdze0e5iUYScIXnwU0lcaejaIVGGGIihKEJ7RzqLs1Mx9x8pzHQf8XbkHAAAAABJRU5ErkJggg=="
+                }
+            ]
+        }
+    ]
+}
