@@ -7,6 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Baidu: typeof import('./src/components/icons/Baidu.vue')['default']
+    BaiduIcon: typeof import('./src/components/icons/BaiduIcon.vue')['default']
     HomeHeader: typeof import('./src/components/HomeHeader.vue')['default']
     IconSearch: typeof import('./src/components/icons/IconSearch.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
