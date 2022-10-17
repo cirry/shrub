@@ -2,9 +2,16 @@
     <div class="flex items-center justify-between">
         <span> {{ appTitle }}</span>
         <div class="py-8 w-1/2">
-            <n-input round size="large" placeholder="搜索" v-model:value="searchInput" @keyup.enter="handleSearch">
+            <n-input size="large" class="rounded-l-full rounded-r-full" placeholder="搜索" v-model:value="searchInput" @keyup.enter="handleSearch">
                 <template #prefix>
-                    <n-icon :component="Search"/>
+                    <n-dropdown trigger="click" :options="searchEngines" placement="bottom-start">
+                        <n-button circle secondary size="small" style="margin-left: -6px;">
+                            <n-icon class="cursor-pointer" :component="Search"/>
+                        </n-button>
+                    </n-dropdown>
+                </template>
+                <template #suffix>
+                    <n-icon class="cursor-pointer" :component="Search"/>
                 </template>
             </n-input>
         </div>
@@ -24,7 +31,7 @@
         trigger: ['input', 'blur']
       }"
                     >
-                        <n-input v-model:value="dynamicForm.name" clearable />
+                        <n-input v-model:value="dynamicForm.name" clearable/>
                     </n-form-item>
 
                     <n-form-item
@@ -38,7 +45,7 @@
         trigger: ['input', 'blur']
       }"
                     >
-                        <n-input v-model:value="item.hobby" clearable />
+                        <n-input v-model:value="item.hobby" clearable/>
                         <n-button style="margin-left: 12px" @click="removeItem(index)">
                             删除
                         </n-button>
@@ -61,11 +68,12 @@
 </template>
 
 <script setup>
-import { ref, watch,  reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import { Search, Cog, EditRegular } from '@vicons/fa'
 import { NIcon } from 'naive-ui'
 import { useConfigDataStore } from "@/stores/config-data";
 import { storeToRefs } from "pinia";
+import BaiduIcon from '../components/icons/BaiduIcon.vue'
 
 const renderIcon = ( icon ) => {
     return () => {
@@ -89,6 +97,13 @@ const options = [
         key: "2"
     },
 ]
+const searchEngines = [
+    {
+        label: '百度',
+        icon: renderIcon(BaiduIcon),
+        key: '1'
+    },
+]
 
 const handleSearch = () => {
     window.open("http://www.baidu.com.cn/s?wd=" + searchText.value)
@@ -108,7 +123,7 @@ const dynamicForm = reactive({
     hobbies: [{ hobby: '' }]
 })
 
-const removeItem = (index) => {
+const removeItem = ( index ) => {
     dynamicForm.hobbies.splice(index, 1)
 }
 
@@ -117,7 +132,7 @@ const addItem = () => {
 }
 
 const handleValidateClick = () => {
-    formRef.value?.validate((errors) => {
+    formRef.value?.validate(( errors ) => {
         if (!errors) {
             console.log('验证通过')
         } else {
