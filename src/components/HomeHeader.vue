@@ -4,11 +4,11 @@
         <div class="py-8 w-1/2">
             <n-input size="large" class="rounded-l-full rounded-r-full" placeholder="搜索" v-model:value="searchInput" @keyup.enter="handleSearch">
                 <template #prefix>
-                    <n-dropdown trigger="click" :options="searchEngines" placement="bottom-start">
+                    <n-popselect v-model:value="searchEnginesValue" :options="searchEngines" trigger="click">
                         <n-button circle secondary size="small" style="margin-left: -6px;">
-                            <n-icon class="cursor-pointer" :component="Search"/>
+                            <n-icon class="cursor-pointer text-xl" :component="searchEnginesValue"/>
                         </n-button>
-                    </n-dropdown>
+                    </n-popselect>
                 </template>
                 <template #suffix>
                     <n-icon class="cursor-pointer" :component="Search"/>
@@ -19,48 +19,34 @@
             <n-icon class="text-xl cursor-pointer" :component="Cog"/>
         </n-dropdown>
 
-        <n-modal v-model:show="showModal">
-            <n-card class="sm:w-4/5 md:w-2/3 lg:w-1/2 xl:w-1/3" title="模态框" :bordered="false" size="huge" role="dialog" aria-modal="true">
-                <n-form ref="formRef" :model="dynamicForm" label-placement="left" size="small" :style="{ maxWidth: '640px' }">
-                    <n-form-item
-                        label="姓名"
-                        path="name"
-                        :rule="{
-        required: true,
-        message: '请输入姓名',
-        trigger: ['input', 'blur']
-      }"
-                    >
-                        <n-input v-model:value="dynamicForm.name" clearable/>
+        <n-modal
+            v-model:show="showModal"
+            :close-on-esc="true"
+        >
+            <n-card class="sm:w-4/5 md:w-2/3 lg:w-2/3 xl:w-1/2" title="添加网址" closable @close="handleClose"
+                    :bordered="false" size="huge" role="dialog" aria-modal="true">
+                <n-form ref="formRef" :model="formValue" label-placement="left" size="small">
+                    <n-form-item label="分类名称：" path="categoryName" :rule="rules.categoryName">
+                        <n-input v-model:value="formValue.categoryName" placeholder="请输入" clearable/>
                     </n-form-item>
-
-                    <n-form-item
-                        v-for="(item, index) in dynamicForm.hobbies"
-                        :key="index"
-                        :label="`爱好${index + 1}`"
-                        :path="`hobbies[${index}].hobby`"
-                        :rule="{
-        required: true,
-        message: `请输入爱好${index + 1}`,
-        trigger: ['input', 'blur']
-      }"
-                    >
-                        <n-input v-model:value="item.hobby" clearable/>
-                        <n-button style="margin-left: 12px" @click="removeItem(index)">
-                            删除
-                        </n-button>
+                    <n-form-item label="网址名称：" path="name" :rule="rules.name">
+                        <n-input v-model:value="formValue.name" placeholder="请输入" clearable/>
                     </n-form-item>
-
-                    <n-form-item>
-                        <n-space>
-                            <n-button attr-type="button" @click="handleValidateClick">
-                                验证
-                            </n-button>
-                            <n-button attr-type="button" @click="addItem">
-                                增加
-                            </n-button>
-                        </n-space>
+                    <n-form-item label="网站链接：" path="link" :rule="rules.link">
+                        <n-input v-model:value="formValue.link" placeholder="请输入" clearable/>
                     </n-form-item>
+                    <n-form-item label="图标样式：" path="iconClass">
+                        <n-input v-model:value="formValue.iconClass" placeholder="请输入" clearable/>
+                    </n-form-item>
+                    <n-form-item label="图标地址：" path="iconUrl">
+                        <n-input v-model:value="formValue.iconUrl" placeholder="请输入" clearable/>
+                    </n-form-item>
+                    <n-button attr-type="button" type="primary" @click="handleClose">
+                        添加
+                    </n-button>
+                    <n-button attr-type="button"  @click="handleValidateClick">
+                        取消
+                    </n-button>
                 </n-form>
             </n-card>
         </n-modal>
@@ -74,6 +60,8 @@ import { NIcon } from 'naive-ui'
 import { useConfigDataStore } from "@/stores/config-data";
 import { storeToRefs } from "pinia";
 import BaiduIcon from '../components/icons/BaiduIcon.vue'
+import GoogleIcon from '../components/icons/GoogleIcon.vue'
+import MicrosoftIcon from '../components/icons/MicrosoftIcon.vue'
 
 const renderIcon = ( icon ) => {
     return () => {
@@ -99,11 +87,33 @@ const options = [
 ]
 const searchEngines = [
     {
-        label: '百度',
-        icon: renderIcon(BaiduIcon),
-        key: '1'
-    },
+        label: '百度一下',
+        value: renderIcon(BaiduIcon),
+        key: 'baidu'
+    }, {
+        label: '谷歌搜索',
+        value: renderIcon(GoogleIcon),
+        key: 'google'
+    }, {
+        label: '必应搜索',
+        value: renderIcon(MicrosoftIcon),
+        key: 'bingying'
+    }
 ]
+
+const formValue = ref({
+    categoryName: '',
+    name: '',
+    link: '',
+    iconUrl: '',
+    iconClass: '',
+})
+const rules = {
+    categoryName: { required: true, message: '请输入分类名称', trigger: ['input', 'blur'] },
+    name: { required: true, message: '请输入网址名称', trigger: ['input', 'blur'] },
+    link: { required: true, message: '请输入网站链接', trigger: ['input', 'blur'] },
+}
+const searchEnginesValue = ref(renderIcon(BaiduIcon))
 
 const handleSearch = () => {
     window.open("http://www.baidu.com.cn/s?wd=" + searchText.value)
@@ -115,25 +125,18 @@ const handleSelect = ( key ) => {
     }
     console.log(key)
 }
+const handleClose = () => {
+    console.log('close dialog')
+    showModal.value = false
+}
 
 const formRef = ref(null)
 
-const dynamicForm = reactive({
-    name: '',
-    hobbies: [{ hobby: '' }]
-})
-
-const removeItem = ( index ) => {
-    dynamicForm.hobbies.splice(index, 1)
-}
-
-const addItem = () => {
-    dynamicForm.hobbies.push({ hobby: '' })
-}
 
 const handleValidateClick = () => {
     formRef.value?.validate(( errors ) => {
         if (!errors) {
+            console.log(formValue.value)
             console.log('验证通过')
         } else {
             console.log(errors)
