@@ -19,36 +19,34 @@
             <n-icon class="text-xl cursor-pointer" :component="Cog"/>
         </n-dropdown>
 
-        <n-modal
-            v-model:show="showModal"
-            :close-on-esc="true"
-        >
-            <n-card class="sm:w-4/5 md:w-2/3 lg:w-2/3 xl:w-1/2" title="添加网址" closable @close="handleClose"
-                    :bordered="false" size="huge" role="dialog" aria-modal="true">
-                <n-form ref="formRef" :model="formValue" label-placement="left" size="small">
-                    <n-form-item label="分类名称：" path="categoryName" :rule="rules.categoryName">
-                        <n-input v-model:value="formValue.categoryName" placeholder="请输入" clearable/>
-                    </n-form-item>
-                    <n-form-item label="网址名称：" path="name" :rule="rules.name">
-                        <n-input v-model:value="formValue.name" placeholder="请输入" clearable/>
-                    </n-form-item>
-                    <n-form-item label="网站链接：" path="link" :rule="rules.link">
-                        <n-input v-model:value="formValue.link" placeholder="请输入" clearable/>
-                    </n-form-item>
-                    <n-form-item label="图标样式：" path="iconClass">
-                        <n-input v-model:value="formValue.iconClass" placeholder="请输入" clearable/>
-                    </n-form-item>
-                    <n-form-item label="图标地址：" path="iconUrl">
-                        <n-input v-model:value="formValue.iconUrl" placeholder="请输入" clearable/>
-                    </n-form-item>
-                    <n-button attr-type="button" type="primary" @click="handleClose">
-                        添加
-                    </n-button>
-                    <n-button attr-type="button"  @click="handleValidateClick">
-                        取消
-                    </n-button>
-                </n-form>
-            </n-card>
+        <n-modal v-model:show="showModal" preset="card" title="添加网址" class="sm:w-4/5 md:w-2/3 lg:w-2/3 xl:w-1/2" style="width: 50%;" :close-on-esc="true">
+            <n-form ref="formRef" :model="formValue" label-placement="left" label-width="auto" size="small">
+                <n-form-item label="分类名称：" path="categoryName" :rule="rules.categoryName">
+                    <n-input v-model:value="formValue.categoryName" placeholder="请输入" clearable/>
+                </n-form-item>
+                <n-form-item label="网址名称：" path="name" :rule="rules.name">
+                    <n-input v-model:value="formValue.name" placeholder="请输入" clearable/>
+                </n-form-item>
+                <n-form-item label="网站链接：" path="link" :rule="rules.link">
+                    <n-input v-model:value="formValue.link" placeholder="请输入" clearable/>
+                </n-form-item>
+                <n-form-item label="图标样式：" path="iconClass">
+                    <n-input v-model:value="formValue.iconClass" placeholder="请输入" clearable/>
+                </n-form-item>
+                <n-form-item label="图标地址：" path="iconUrl">
+                    <n-input v-model:value="formValue.iconUrl" placeholder="请输入" clearable/>
+                </n-form-item>
+                <div class="flex justify-end">
+                    <n-space>
+                        <n-button attr-type="button" type="primary" @click="handleClose">
+                            添加
+                        </n-button>
+                        <n-button attr-type="button" @click="handleValidateClick">
+                            取消
+                        </n-button>
+                    </n-space>
+                </div>
+            </n-form>
         </n-modal>
     </div>
 </template>
@@ -127,11 +125,19 @@ const handleSelect = ( key ) => {
 }
 const handleClose = () => {
     console.log('close dialog')
+    formRef.value?.validate(errors => {
+        if (!errors) {
+            console.log('valid')
+            console.log(formValue.value)
+        } else {
+            console.log(errors)
+            console.log('invalid')
+        }
+    })
     showModal.value = false
 }
 
 const formRef = ref(null)
-
 
 const handleValidateClick = () => {
     formRef.value?.validate(( errors ) => {
