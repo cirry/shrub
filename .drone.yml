@@ -1,0 +1,53 @@
+kind: pipeline # 定义一个管道
+type: docker # 当前管道的类型
+load: ""
+name: build # 当前管道的名称
+
+volumes: # 声明数据卷（此为服务器中的实际目录）
+  - name: node_modules # 数据卷名称
+    host: # Host Volume
+      path: C:/docker-compose/drone/drone/shrub/node_modules # 宿主机目录    #绝对路径
+  - name: dist
+    host:
+      path: C:/docker-compose/drone/drone/shrub/dist # 打包目录
+
+clone:
+  disable: false # 代码拉取
+  depth: 1
+
+steps: # 定义管道的执行步骤
+  - name: build
+    image: node:16.14.2 # 当前步骤使用的镜像
+    pull: if-not-exists # 如果镜像不存在则拉取,免去每次都要重新下载
+    depends_on: [clone] # 依赖的步骤
+    volumes: # 挂载数据卷（此为容器内的目录）
+      - name: node_modules # 数据卷名称，相当于把node_modules挂载在下面的路径上
+        path: /drone/src/node_modules # 容器内目录 绝对路径
+      - name: dist
+        path: /drone/src/dist
+    commands: # 当前步骤执行的命令
+      - pwd # 查看当前目录
+      - npm config set registry https://registry.npm.taobao.org # 切换淘宝镜像
+      - npm install # 安装node_modules包
+      - npm run build # 执行编译
+
+  - name: depoly
+    depends_on: [build] # 依赖的步骤
+    image: appleboy/drone-scp
+    volumes: # 挂载数据卷（此为容器内的目录）
+      - name: dist
+        path: /drone/src/dist
+    settings:
+      host: 159.75.81.123
+      username:
+        from_secret: username
+      password:
+        from_secret: password
+      port: 22
+      target: /home/cirry/shrub
+      source: dist
+      rm: true
+      overwrite: true
+#    commands: # 当前步骤执行的命令
+#      - pwd # 查看当前目录
+#      - ls ./dist
